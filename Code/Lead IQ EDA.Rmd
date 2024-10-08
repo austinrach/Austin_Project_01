@@ -15,6 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 lead_df <- read.csv("/Users/austinra/Documents/GitHub/Austin_Project_01/DataRaw/lead-iq-01.csv")
 ```
 
+Removing 999 outlier from IQ column 10/07/2024
+```{r}
+lead_df$IQ <- ifelse(lead_df$IQ == 999,99,lead_df$IQ)
+```
+
 <br>
 ```{r, echo = FALSE, message = FALSE}
 library(ggplot2)
@@ -44,7 +49,10 @@ kable(IQ_IQR, caption = 'IQ Summary Table')
 ```
 <br>
 
-The boxplot is difficult to interpret as there is a very large IQ value in the Far from Lead Smelter group. The table shows us a more detailed summary of the Near Smelter and Far Smelter groups IQ values. The two groups have similar interquartile ranges, but the mean of the Far Smelter group IQ is higher than the Near Smelter group IQ. This might be driven by our extreme maximum value in this group of 999. 
+<!-- The boxplot is difficult to interpret as there is a very large IQ value in the Far from Lead Smelter group. The table shows us a more detailed summary of the Near Smelter and Far Smelter groups IQ values. The two groups have similar interquartile ranges, but the mean of the Far Smelter group IQ is higher than the Near Smelter group IQ. This might be driven by our extreme maximum value in this group of 999.  -->
+
+
+Replacing the extreme value of 999 with 99 reveals some other extreme values in the Far from Lead Smelter group. The two values, 46 and 50, at the lower end and the two values at the upper end, 128 and 141 stand out. The interquartile range for each group remained roughly the same, with the IQR of Far from Lead Smelter group decreasing by 0.5. Additionally, the mean of the Far from Lead Smelter group dropped significantly from 106.12 to 92.69.
 <br>
 <br>
 Less than 1 mile from Lead Smelter Mean IQ - `r round(mean(nearsmelter$IQ),2)`
@@ -56,3 +64,8 @@ Below is a summary of the IQ levels of all people in the data set, regardless of
 ```{r}
 summary(lead_df$IQ)
 ```
+
+```{r, echo = FALSE}
+write.csv(lead_df,"/Users/austinra/Documents/GitHub/Austin_Project_01/DataProcessed/lead-iq-01_outlierremoved.csv")
+```
+
